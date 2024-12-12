@@ -18,7 +18,7 @@ import os
 import sys
 import subprocess
 import platform
-import tank
+import sgtk
 
 
 
@@ -34,7 +34,7 @@ ENGINES = {
 
 
 
-class AppLaunch(tank.Hook):
+class AppLaunch(sgtk.Hook):
     """
     Hook to run an application.
     """
@@ -60,22 +60,26 @@ class AppLaunch(tank.Hook):
         system = platform.system()
 
         app_name = ENGINES[engine_name]
-        context = self.tank.context_from_path(self.tank.project_path)
-        sg = self.tank.shotgun
+        context = self.sgtk.context_from_path(self.sgtk.project_path)
+        sg = self.sgtk.shotgun
         project = context.project
         user = context.user
-        depart = sg.find_one("Department", [['users', 'in', user]], ['name'])
+        
+        # 사용자 정보가 있는 경우에만 부서 정보를 조회
+        depart = None
+        if user:
+            depart = sg.find_one("Department", [['users', 'in', user]], ['name'])
 
         # Check department permissions
         depart_confirm = False
         if depart and depart.get('name'):  
             if (depart['name'] == 'RND' and engine_name == 'tk-nuke') or \
                (depart['name'] in ['General']) or \
-               (engine_name == 'tk-unreal'):  
+               (engine_name in ['tk-unreal', 'tk-maya']):  
                 depart_confirm = True
         else:
-            # Department 정보가 없는 경우 Unreal Engine은 허용
-            if engine_name == 'tk-unreal':
+            # Department 정보가 없는 경우 Unreal Engine과 Maya는 허용
+            if engine_name in ['tk-unreal', 'tk-maya']:
                 depart_confirm = True
 
         # Handle UE special case for Python 3
@@ -97,10 +101,10 @@ class AppLaunch(tank.Hook):
         if not depart_confirm:
             return {"command": "", "return_code": 1}
 
-        if tank.util.is_linux():
+        if sgtk.util.is_linux():
             cmd = "%s %s &" % (app_path, app_args)
 
-        elif tank.util.is_macos():
+        elif sgtk.util.is_macos():
             if app_path.endswith(".app"):
                 cmd = 'open -n -a "%s"' % (app_path)
                 if app_args:

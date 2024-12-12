@@ -27,51 +27,11 @@ settings.tk-unreal.project:
       location: "@apps.tk-multi-pythonconsole.location"
     tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel.unreal"
   location: "@tk-unreal.location"
-  menu_favourites:
-    - {app_instance: tk-multi-publish2, name: Publish...}
-    - {app_instance: tk-multi-loader2, name: Load...}
+  menu_favourites: []
   run_at_startup:
-    - {app_instance: tk-multi-shotgunpanel, name: ''}
-    - {app_instance: tk-multi-publish2, name: ''}
-  launch_builtin_plugins: [basic, shotgrid]
-  automatic_context_switch: true
+  - {app_instance: tk-multi-shotgunpanel, name: ''}
+  launch_builtin_plugins: [basic]
+  automatic_context_switch: false
 
-# asset_step - Maya FBX 파일 임포트를 위한 새로운 설정 추가
-settings.tk-unreal.asset_step:
-  apps:
-    tk-multi-about:
-      location: "@apps.tk-multi-about.location"
-    tk-multi-loader2: "@settings.tk-multi-loader2.unreal"
-    tk-multi-publish2: "@settings.tk-multi-publish2.unreal.asset_step"
-    tk-multi-pythonconsole:
-      location: "@apps.tk-multi-pythonconsole.location"
-    tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel.unreal"
-  location: "@tk-unreal.location"
-  menu_favourites:
-    - {app_instance: tk-multi-publish2, name: Publish...}
-    - {app_instance: tk-multi-loader2, name: Load...}
-  run_at_startup:
-    - {app_instance: tk-multi-shotgunpanel, name: ''}
-    - {app_instance: tk-multi-publish2, name: ''}
-  launch_builtin_plugins: [basic, shotgrid]
-  automatic_context_switch: true
-
-# asset
-settings.tk-unreal.asset:
-  apps:
-    tk-multi-about:
-      location: "@apps.tk-multi-about.location"
-    tk-multi-loader2: "@settings.tk-multi-loader2.unreal"
-    tk-multi-publish2: "@settings.tk-multi-publish2.unreal.asset"
-    tk-multi-pythonconsole:
-      location: "@apps.tk-multi-pythonconsole.location"
-    tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel.unreal"
-  location: "@tk-unreal.location"
-  menu_favourites:
-    - {app_instance: tk-multi-publish2, name: Publish...}
-    - {app_instance: tk-multi-loader2, name: Load...}
-  run_at_startup:
-    - {app_instance: tk-multi-shotgunpanel, name: ''}
-    - {app_instance: tk-multi-publish2, name: ''}
-  launch_builtin_plugins: [basic, shotgrid]
-  automatic_context_switch: true
+settings.tk-multi-publish2.unreal.project:
+  hook_publish_asset: "{self}/publish_file.py:{config}/hooks/tk-multi-publish2/basic/publish_asset.py"
